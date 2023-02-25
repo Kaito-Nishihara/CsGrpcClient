@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer";
+
+package login;
+
+// The greeting service definition.
+service user {
+ 
+  rpc  Login(LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string email = 1;
+  string password =2;
+}
+
+message LoginResponse {
+  bytes data = 1;
+  string token =2;
+}
