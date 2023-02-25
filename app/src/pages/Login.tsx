@@ -1,4 +1,27 @@
+import { useState } from "react";
+
+import { LoginClient } from "../apiClient/LoginClient";
+import { LoginRequest } from "../apiClient/protos/grpc/user_pb";
+
 export default function Login() {
+  const [request] = useState(new LoginRequest());
+
+  const handleSubmit = async (e: any) => {
+    try {
+      e.preventDefault();
+      const userLoginRes = await LoginClient.login(request);
+      const bytes = userLoginRes.getData();
+      if (bytes instanceof Uint8Array) {
+        const json = new TextDecoder().decode(bytes);
+        console.log(json);
+        //const jsonParse = JSON.parse(json);
+        //console.log(jsonParse.toString());
+      }
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8 mt-20">
@@ -10,7 +33,7 @@ export default function Login() {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
               <div>
                 <label
                   htmlFor="email"
@@ -25,6 +48,7 @@ export default function Login() {
                     type="email"
                     autoComplete="email"
                     required
+                    onChange={(e) => request.setEmail(e.target.value)}
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                   />
                 </div>
@@ -44,6 +68,7 @@ export default function Login() {
                     type="password"
                     autoComplete="current-password"
                     required
+                    onChange={(e) => request.setPassword(e.target.value)}
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                   />
                 </div>

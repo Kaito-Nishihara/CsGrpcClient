@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <div className="h-full">
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
         </Routes>
       </div>
     </BrowserRouter>
